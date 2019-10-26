@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MyExpenseManager</string>
+    <string name="add_button">Add</string>
+    <string name="search_button">Search</string>
+    <string name="delete_button">Delete</string>
+    <string name="clear_button">Clear</string>
+
+
+    <string name="cost_edit_text">Cost</string>
+    <string name="desc_edit_text">Description</string>
+    <string name="date_edit_text">Date dd/mm/yyyy</string>
+</resources>
