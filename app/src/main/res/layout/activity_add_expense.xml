@@ -13,6 +13,7 @@
         android:hint="@string/cost_edit_text"
         android:id="@+id/mxm_cost"
         android:inputType="numberDecimal"
+        android:maxLength="20"
         android:padding="16dp"/>
 
     <EditText
@@ -21,6 +22,7 @@
         android:hint="@string/desc_edit_text"
         android:id="@+id/mxm_desc"
         android:inputType="text"
+        android:maxLength="100"
         android:padding="16dp"/>
 
     <EditText
@@ -28,6 +30,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/date_edit_text"
         android:id="@+id/mxm_date"
+        android:maxLength="10"
         android:inputType="date"
         android:padding="16dp"/>
 

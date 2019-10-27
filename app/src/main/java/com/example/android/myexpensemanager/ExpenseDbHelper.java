@@ -16,7 +16,7 @@ public class ExpenseDbHelper extends SQLiteOpenHelper {
                     ExpenseEntry._ID + " INTEGER PRIMARY KEY," +
                     ExpenseEntry.COLUMN_NAME_COST + " DOUBLE," +
                     ExpenseEntry.COLUMN_NAME_DESCRIPTION + " TEXT," +
-                    ExpenseEntry.COLUMN_NAME_DATE + " TEXT,)";
+                    ExpenseEntry.COLUMN_NAME_DATE + " TEXT)";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + ExpenseEntry.TABLE_NAME;

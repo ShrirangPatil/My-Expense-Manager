@@ -1,5 +1,7 @@
 package com.example.android.myexpensemanager;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,10 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AddExpense extends AppCompatActivity {
 
-    EditText mCostET;
-    EditText mDescET;
-    EditText mDateET;
-    String TAG = "AddExpense";
+    private EditText mCostET;
+    private EditText mDescET;
+    private EditText mDateET;
+    private static String TAG = AddExpense.class.getName();
+    private ExpenseDbHelper dbHelper = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,18 +35,21 @@ public class AddExpense extends AppCompatActivity {
                 mDescET = findViewById(R.id.mxm_desc);
                 mDateET = findViewById(R.id.mxm_date);
                 //Add the expense object
-                double cost = Double.parseDouble(mCostET.getText().toString());
-                String desc = mDescET.getText().toString();
-                String date = mDateET.getText().toString();
+                if ((!mCostET.getText().toString().matches("")) && (!mDescET.getText().toString().matches(""))) {
+                    double cost = Double.parseDouble(mCostET.getText().toString());
+                    String desc = mDescET.getText().toString();
+                    String date = mDateET.getText().toString();
 
-                if(chechDate(date)) {
-                    insertData(new Expense(cost, desc, date));
-                    Toast.makeText(AddExpense.this, "Successfully added!", Toast.LENGTH_SHORT).show();
+                    if (AddExpense.checkDate(date)) {
+                        insertData(new Expense(cost, desc, date));
+                    } else {
+                        Toast.makeText(AddExpense.this, "Invalid data!!!", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
                 else {
                     Toast.makeText(AddExpense.this, "Invalid data!!!", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -59,32 +65,58 @@ public class AddExpense extends AppCompatActivity {
         });
     }
 
-    public boolean insertData(Expense expense) {
+    public void insertData(final Expense expense) {
 
 
         MyWorkerThread workerThread = new MyWorkerThread("addHandler");
         workerThread.start();
         Handler handler = new Handler(workerThread.getLooper());
+        dbHelper = new ExpenseDbHelper(getApplicationContext());
 
-        //ExpenseDbHelper dbHelper = new ExpenseDbHelper(AddExpense.this);
         Runnable addRunnable = new Runnable() {
             @Override
             public void run() {
-                Log.i(TAG, "Worker thread id "+Thread.currentThread().getId());
+
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+// Create a new map of values, where column names are the keys
+                ContentValues values = new ContentValues();
+                values.put(ExpenseContract.ExpenseEntry.COLUMN_NAME_COST, expense.getCost());
+                values.put(ExpenseContract.ExpenseEntry.COLUMN_NAME_DESCRIPTION, expense.getDesc());
+                values.put(ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE, AddExpense.inverseDate(expense.getDate()));
+
+// Insert the new row, returning the primary key value of the new row
+                long newRowId = db.insert(ExpenseContract.ExpenseEntry.TABLE_NAME, null, values);
+                Log.i(TAG, "Worker thread id "+Thread.currentThread().getId() + " inserted row " + newRowId);
+
             }
         };
         //Log.i(TAG, "Worker thread id"+workerThread.mThread.getId()+" "+workerThread.getLooper());
         handler.post(addRunnable);
-        Log.i(TAG, "Main thread id"+Thread.currentThread().getId());
-        return true;
+        Toast.makeText(AddExpense.this, "Successfully added!", Toast.LENGTH_SHORT).show();
+        mCostET.setText("");
+        mDateET.setText("");
+        mDescET.setText("");
+        workerThread.quit();
     }
-    public boolean chechDate(String date) {
+
+    public static String inverseDate (String date) {
+        String[] splitDate = date.split("/");
+        if (splitDate[1].length() == 1) {
+            splitDate[1] = "0" + splitDate[1];
+        }
+        if (splitDate[2].length() == 1) {
+            splitDate[2] = "0" + splitDate[2];
+        }
+        String reverseDate = splitDate[2] + "/" +splitDate[1]+ "/" +splitDate[0];
+        return reverseDate;
+    }
+    public static boolean checkDate(String date) {
         try {
             String[] dateArray = date.split("/");
             int day = Integer.parseInt(dateArray[0]);
             int month = Integer.parseInt(dateArray[1]);
             int year = Integer.parseInt(dateArray[2]);
-            Log.i(TAG, ""+day+" "+month+" "+year);
             int dayLimit = 0;
 
             if (month < 1 || month > 12) {
@@ -135,5 +167,14 @@ public class AddExpense extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dbHelper != null) {
+            dbHelper.close();
+        }
+
     }
 }
