@@ -16,4 +16,6 @@
     <string name="end_range">End</string>
     <string name="date">Date</string>
     <string name="delete_date">Data Will Get Deleted Till</string>
+    <string name="add_expense">Add Expense</string>
+    <string name="welcome">WELCOME</string>
 </resources>

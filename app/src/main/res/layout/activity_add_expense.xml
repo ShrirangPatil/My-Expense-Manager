@@ -4,9 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddExpense"
+    android:background="@color/background"
     android:orientation="vertical"
     android:padding="16dp">
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_expense"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
