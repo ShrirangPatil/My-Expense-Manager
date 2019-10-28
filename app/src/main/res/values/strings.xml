@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyExpenseManager</string>
+    <string name="app_name">My Expense Manager</string>
 
     <string name="add_button">Add</string>
     <string name="search_button">Search</string>
@@ -15,4 +15,5 @@
     <string name="start_range">Start</string>
     <string name="end_range">End</string>
     <string name="date">Date</string>
+    <string name="delete_date">Data Will Get Deleted Till</string>
 </resources>

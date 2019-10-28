@@ -66,11 +66,13 @@ public class QueryExpense extends AppCompatActivity {
 
     }
 
-    public void searchData(double startCostF, double endCostF, String dateF) {
+    private void searchData(double startCostF, double endCostF, String dateF) {
 
         dbHelper = new ExpenseDbHelper(getApplicationContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor;
+        String sortOrder =
+                ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " DESC";
         if( dateF.matches("")) {
             String selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_COST + " BETWEEN ? AND ?";
             String[] selectionArgs = {Double.toString(startCostF), Double.toString(endCostF)};
@@ -81,7 +83,7 @@ public class QueryExpense extends AppCompatActivity {
                     selectionArgs,          // The values for the WHERE clause
                     null,                   // don't group the rows
                     null,                   // don't filter by row groups
-                    null               // The sort order
+                    sortOrder               // The sort order
             );
         }
         else {
@@ -98,10 +100,11 @@ public class QueryExpense extends AppCompatActivity {
                     selectionArgs,          // The values for the WHERE clause
                     null,                   // don't group the rows
                     null,                   // don't filter by row groups
-                    null               // The sort order
+                    sortOrder               // The sort order
             );
         }
         expenseList.clear();
+        double totalExpense = 0;
         while(cursor.moveToNext()) {
             double cost = cursor.getDouble(
                     cursor.getColumnIndexOrThrow(ExpenseContract.ExpenseEntry.COLUMN_NAME_COST));
@@ -109,6 +112,7 @@ public class QueryExpense extends AppCompatActivity {
                     cursor.getColumnIndexOrThrow(ExpenseContract.ExpenseEntry.COLUMN_NAME_DESCRIPTION));
             String date = cursor.getString(
                     cursor.getColumnIndexOrThrow(ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE));
+            totalExpense += cost;
             expenseList.add(new Expense(cost, desc, AddExpense.inverseDate(date)));
         }
         cursor.close();
@@ -123,6 +127,7 @@ public class QueryExpense extends AppCompatActivity {
                 Toast.makeText(QueryExpense.this,expense.getDesc(),Toast.LENGTH_LONG).show();
             }
         });
+        Toast.makeText(this, "Total expense = "+totalExpense, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -108,8 +108,7 @@ public class AddExpense extends AppCompatActivity {
         if (splitDate[2].length() == 1) {
             splitDate[2] = "0" + splitDate[2];
         }
-        String reverseDate = splitDate[2] + "/" +splitDate[1]+ "/" +splitDate[0];
-        return reverseDate;
+        return (splitDate[2] + "/" +splitDate[1]+ "/" +splitDate[0]);
     }
     public static boolean checkDate(String date) {
         try {
