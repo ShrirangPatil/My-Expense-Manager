@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -56,9 +57,9 @@ public class DeleteExpense extends AppCompatActivity {
     }
 
     private void deleteData(final String date) {
-        MyWorkerThread workerThread = new MyWorkerThread("deleteHandler");
-        workerThread.start();
-        Handler handler = new Handler(workerThread.getLooper());
+        //MyWorkerThread workerThread = new MyWorkerThread("deleteHandler");
+        //workerThread.start();
+        Handler handler = new Handler(MyWorkerThread.getWorkerThreadLooper());
         dbHelper = new ExpenseDbHelper(getApplicationContext());
         Runnable runnable = new Runnable() {
             @Override
@@ -68,6 +69,7 @@ public class DeleteExpense extends AppCompatActivity {
                 String[] selectionArgs = { date };
                 int deletedRows = db.delete(ExpenseContract.ExpenseEntry.TABLE_NAME, selection, selectionArgs);
                 Toast.makeText(getApplicationContext(), "Deleted items = "+deletedRows, Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "Thread in action "+Thread.currentThread().getName());
             }
         };
         handler.post(runnable);

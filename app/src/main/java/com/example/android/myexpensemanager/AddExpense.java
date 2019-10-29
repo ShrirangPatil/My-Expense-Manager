@@ -68,9 +68,9 @@ public class AddExpense extends AppCompatActivity {
     public void insertData(final Expense expense) {
 
 
-        MyWorkerThread workerThread = new MyWorkerThread("addHandler");
-        workerThread.start();
-        Handler handler = new Handler(workerThread.getLooper());
+        //MyWorkerThread workerThread = new MyWorkerThread("addHandler");
+        //workerThread.start();
+        Handler handler = new Handler(MyWorkerThread.getWorkerThreadLooper());
         dbHelper = new ExpenseDbHelper(getApplicationContext());
 
         Runnable addRunnable = new Runnable() {
@@ -87,7 +87,7 @@ public class AddExpense extends AppCompatActivity {
 
 // Insert the new row, returning the primary key value of the new row
                 long newRowId = db.insert(ExpenseContract.ExpenseEntry.TABLE_NAME, null, values);
-                Log.i(TAG, "Worker thread id "+Thread.currentThread().getId() + " inserted row " + newRowId);
+                Log.i(TAG, "Worker thread "+Thread.currentThread().getName() + " inserted row " + newRowId);
 
             }
         };
@@ -97,7 +97,6 @@ public class AddExpense extends AppCompatActivity {
         mCostET.setText("");
         mDateET.setText("");
         mDescET.setText("");
-        workerThread.quit();
     }
 
     public static String inverseDate (String date) {
