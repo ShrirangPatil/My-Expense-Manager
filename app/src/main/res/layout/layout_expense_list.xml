@@ -8,14 +8,24 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="left"
+        android:layout_margin="8dp"
         android:id="@+id/mxm_display_cost"
         android:textSize="20sp"/>
-    <TextView
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="left"
         android:layout_weight="1"
-        android:layout_marginLeft="8dp"
-        android:id="@+id/mxm_display_date"
-        android:textSize="20sp"/>
+        android:layout_margin="8dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:id="@+id/mxm_display_date"
+            android:textSize="20sp"/>
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/baseline_label_black_18dp" />
+    </LinearLayout>
 </LinearLayout>

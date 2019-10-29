@@ -46,11 +46,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_button"
+        android:textSize="16sp"
+        android:drawableStart="@drawable/baseline_add_black_18dp"
+        android:layout_margin="8dp"
         android:id="@+id/mxm_addx"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/clear_button"
+        android:textSize="16sp"
+        android:drawableStart="@drawable/baseline_clear_black_18dp"
+        android:layout_margin="8dp"
         android:id="@+id/mxm_clear"/>
 </LinearLayout>

@@ -25,13 +25,17 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:id="@+id/mxm_search_delete"
+        android:textSize="16sp"
+        android:layout_margin="8dp"
+        android:drawableStart="@drawable/baseline_search_black_18dp"
         android:text="@string/search_button"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:textSize="16sp"
+        android:layout_margin="8dp"
+        android:drawableStart="@drawable/baseline_delete_forever_black_18dp"
         android:id="@+id/mxm_delete_button"
         android:text="@string/delete_button"/>
     <LinearLayout
