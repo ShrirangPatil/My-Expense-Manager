@@ -2,6 +2,7 @@ package com.example.android.myexpensemanager;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -21,6 +22,8 @@ public class DeleteExpense extends AppCompatActivity {
     private ExpenseDbHelper dbHelper = null;
     private ArrayList<Expense> expenseList = new ArrayList<>();
     private static String TAG = DeleteExpense.class.getName();
+    private ExpenseAdapter expenseAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +34,7 @@ public class DeleteExpense extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 EditText deleteDate = findViewById(R.id.mxm_delete_date);
+                expenseAdapter.clear();
                 if (AddExpense.checkDate(deleteDate.getText().toString())) {
                         deleteData(AddExpense.inverseDate(deleteDate.getText().toString()));
                 }
@@ -46,7 +50,21 @@ public class DeleteExpense extends AppCompatActivity {
             public void onClick(View view) {
                 EditText deleteDate = findViewById(R.id.mxm_delete_date);
                 if (AddExpense.checkDate(deleteDate.getText().toString())) {
-                    searchData(AddExpense.inverseDate(deleteDate.getText().toString()));
+                    //searchData(AddExpense.inverseDate(deleteDate.getText().toString()));
+                    expenseAdapter = new ExpenseAdapter(DeleteExpense.this, new ArrayList<Expense>());
+                    SearchAsyncTask task = new SearchAsyncTask();
+                    task.execute(deleteDate.getText().toString());
+
+                    final ListView listView = findViewById(R.id.mxm_delete_list_view_expense);
+                    listView.setAdapter(expenseAdapter);
+                    listView.setClickable(true);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                            Expense expense = (Expense) listView.getItemAtPosition(position);
+                            Toast.makeText(DeleteExpense.this,expense.getDesc(),Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Invalid Date!!", Toast.LENGTH_SHORT).show();
@@ -54,6 +72,24 @@ public class DeleteExpense extends AppCompatActivity {
             }
         });
 
+    }
+
+    private class SearchAsyncTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected void onPreExecute () {
+            super.onPreExecute();
+        }
+        @Override
+        protected Void doInBackground (String... dates) {
+            searchData(AddExpense.inverseDate(dates[0]));
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void v) {
+            expenseAdapter.clear();
+            expenseAdapter.addAll(expenseList);
+        }
     }
 
     private void deleteData(final String date) {
@@ -102,17 +138,6 @@ public class DeleteExpense extends AppCompatActivity {
             expenseList.add(new Expense(cost, desc, AddExpense.inverseDate(date)));
         }
         cursor.close();
-        ExpenseAdapter expenseAdapter = new ExpenseAdapter(DeleteExpense.this, expenseList);
-        final ListView listView = findViewById(R.id.mxm_delete_list_view_expense);
-        listView.setAdapter(expenseAdapter);
-        listView.setClickable(true);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Expense expense = (Expense) listView.getItemAtPosition(position);
-                Toast.makeText(DeleteExpense.this,expense.getDesc(),Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     @Override

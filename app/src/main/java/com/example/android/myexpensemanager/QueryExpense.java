@@ -2,6 +2,7 @@ package com.example.android.myexpensemanager;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,8 @@ public class QueryExpense extends AppCompatActivity {
     private ExpenseDbHelper dbHelper = null;
     private ArrayList<Expense> expenseList = new ArrayList<>();
     private static String TAG = QueryExpense.class.getName();
+    private double totalExpense = 0;
+    private ExpenseAdapter expenseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,36 +37,83 @@ public class QueryExpense extends AppCompatActivity {
                 EditText endCost = findViewById(R.id.mxm_end);
                 EditText dateCost = findViewById(R.id.mxm_search_date);
 
+                double start_cost = 0;
+                double end_cost = Double.MAX_VALUE;
+                String on_date = "";
                 if ((!startCost.getText().toString().matches("")) && (!endCost.getText().toString().matches(""))
                         && AddExpense.checkDate(dateCost.getText().toString()) ) {
-                    double startc = Double.parseDouble(startCost.getText().toString());
-                    double endc = Double.parseDouble(endCost.getText().toString());
-                    searchData(startc, endc, AddExpense.inverseDate(dateCost.getText().toString())); // start, end cost and date are entered
+                    start_cost = Double.parseDouble(startCost.getText().toString());
+                    end_cost = Double.parseDouble(endCost.getText().toString());
+                    on_date = AddExpense.inverseDate(dateCost.getText().toString());
+                    // start, end cost and date are entered
                     Log.i(TAG, "1. start, end cost and date are entered");
                 }
                 else if ((startCost.getText().toString().matches("")) && (endCost.getText().toString().matches(""))
                         && AddExpense.checkDate(dateCost.getText().toString())){
-                    searchData(0, Double.MAX_VALUE, AddExpense.inverseDate(dateCost.getText().toString()));// start and end cost not entered
+                    // start and end cost not entered
+                    on_date = AddExpense.inverseDate(dateCost.getText().toString());
                     Log.i(TAG, "2. start and end cost not entered");
                 }
                 else if (!(startCost.getText().toString().matches("")) && !(endCost.getText().toString().matches(""))
                         && !AddExpense.checkDate(dateCost.getText().toString())){
-                    double startc = Double.parseDouble(startCost.getText().toString());
-                    double endc = Double.parseDouble(endCost.getText().toString());
+                    start_cost = Double.parseDouble(startCost.getText().toString());
+                    end_cost = Double.parseDouble(endCost.getText().toString());
                     dateCost.setText("");
-                    searchData(startc, endc, ""); // date not entered
+                    // date not entered
                     Log.i(TAG,"3. date not entered");
                 }
                 else {
                     dateCost.setText("");
-                    searchData(0, Double.MAX_VALUE, ""); // none are entered
+                    // none are entered
                     Log.i(TAG,"4. none are entered");
                 }
-                Log.i(TAG, "length of ArrayList " + expenseList.size());
-
+                SearchAsyncTask task = new SearchAsyncTask();
+                task.execute(new SearchObject(start_cost, end_cost, on_date));
             }
         });
 
+        expenseAdapter = new ExpenseAdapter(QueryExpense.this, new ArrayList<Expense>());
+        final ListView listView = findViewById(R.id.mxm_list_view_expense);
+        listView.setAdapter(expenseAdapter);
+        listView.setClickable(true);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Expense expense = (Expense) listView.getItemAtPosition(position);
+                Toast.makeText(QueryExpense.this,expense.getDesc(),Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    private class SearchObject {
+        double start_cost;
+        double end_cost;
+        String date;
+        SearchObject(double start_cost, double end_cost, String date) {
+            this.start_cost = start_cost;
+            this.end_cost = end_cost;
+            this.date = date;
+        }
+    }
+
+    private class SearchAsyncTask extends AsyncTask<SearchObject, Void, Void> {
+
+        @Override
+        protected void onPreExecute () {
+            super.onPreExecute();
+        }
+        @Override
+        protected Void doInBackground (SearchObject... searchObjects) {
+            searchData(searchObjects[0].start_cost, searchObjects[0].end_cost, searchObjects[0].date);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void v) {
+            expenseAdapter.clear();
+            expenseAdapter.addAll(expenseList);
+            Toast.makeText(getApplicationContext(), "Total expense = "+totalExpense, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void searchData(double startCostF, double endCostF, String dateF) {
@@ -104,7 +154,7 @@ public class QueryExpense extends AppCompatActivity {
             );
         }
         expenseList.clear();
-        double totalExpense = 0;
+        totalExpense = 0;
         while(cursor.moveToNext()) {
             double cost = cursor.getDouble(
                     cursor.getColumnIndexOrThrow(ExpenseContract.ExpenseEntry.COLUMN_NAME_COST));
@@ -116,18 +166,7 @@ public class QueryExpense extends AppCompatActivity {
             expenseList.add(new Expense(cost, desc, AddExpense.inverseDate(date)));
         }
         cursor.close();
-        ExpenseAdapter expenseAdapter = new ExpenseAdapter(QueryExpense.this, expenseList);
-        final ListView listView = findViewById(R.id.mxm_list_view_expense);
-        listView.setAdapter(expenseAdapter);
-        listView.setClickable(true);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Expense expense = (Expense) listView.getItemAtPosition(position);
-                Toast.makeText(QueryExpense.this,expense.getDesc(),Toast.LENGTH_LONG).show();
-            }
-        });
-        Toast.makeText(this, "Total expense = "+totalExpense, Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "length of ArrayList " + expenseList.size());
     }
 
     @Override
