@@ -101,11 +101,13 @@ public class AddExpense extends AppCompatActivity {
 
     public static String inverseDate (String date) {
         String[] splitDate = date.split("/");
+        //For Date
+        if (splitDate[0].length() == 1) {
+            splitDate[0] = "0" + splitDate[0];
+        }
+        //For Month
         if (splitDate[1].length() == 1) {
             splitDate[1] = "0" + splitDate[1];
-        }
-        if (splitDate[2].length() == 1) {
-            splitDate[2] = "0" + splitDate[2];
         }
         return (splitDate[2] + "/" +splitDate[1]+ "/" +splitDate[0]);
     }

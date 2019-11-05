@@ -22,7 +22,7 @@ public class DeleteExpense extends AppCompatActivity {
     private ExpenseDbHelper dbHelper = null;
     private ArrayList<Expense> expenseList = new ArrayList<>();
     private static String TAG = DeleteExpense.class.getName();
-    private ExpenseAdapter expenseAdapter;
+    private ExpenseAdapter expenseAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,9 @@ public class DeleteExpense extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 EditText deleteDate = findViewById(R.id.mxm_delete_date);
-                expenseAdapter.clear();
+                if (expenseAdapter != null) {
+                    expenseAdapter.clear();
+                }
                 if (AddExpense.checkDate(deleteDate.getText().toString())) {
                         deleteData(AddExpense.inverseDate(deleteDate.getText().toString()));
                 }
