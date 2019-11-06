@@ -15,13 +15,33 @@
         android:textSize="24sp"
         android:layout_marginBottom="8dp"
         android:gravity="center"/>
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:hint="@string/date_edit_text"
-        android:inputType="date"
-        android:id="@+id/mxm_delete_date"/>
+        android:orientation="horizontal">
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/date_edit_text"
+            android:inputType="date"
+            android:id="@+id/mxm_delete_date"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/before"
+                android:id="@+id/mxm_date_before"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/mxm_date_after"
+                android:text="@string/after"/>
+        </LinearLayout>
+    </LinearLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

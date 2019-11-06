@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -36,6 +37,8 @@ public class QueryExpense extends AppCompatActivity {
                 EditText startCost = findViewById(R.id.mxm_start);
                 EditText endCost = findViewById(R.id.mxm_end);
                 EditText dateCost = findViewById(R.id.mxm_search_date);
+                CheckBox checkBoxBefore = findViewById(R.id.mxm_date_before);
+                CheckBox checkBoxAfter = findViewById(R.id.mxm_date_after);
 
                 double start_cost = 0;
                 double end_cost = Double.MAX_VALUE;
@@ -68,7 +71,8 @@ public class QueryExpense extends AppCompatActivity {
                     Log.i(TAG,"4. none are entered");
                 }
                 SearchAsyncTask task = new SearchAsyncTask();
-                task.execute(new SearchObject(start_cost, end_cost, on_date));
+                task.execute(new SearchObject(start_cost, end_cost, on_date,
+                        checkBoxBefore.isChecked(), checkBoxAfter.isChecked()));
             }
         });
 
@@ -90,10 +94,14 @@ public class QueryExpense extends AppCompatActivity {
         double start_cost;
         double end_cost;
         String date;
-        SearchObject(double start_cost, double end_cost, String date) {
+        boolean before;
+        boolean after;
+        SearchObject(double start_cost, double end_cost, String date, boolean before, boolean after) {
             this.start_cost = start_cost;
             this.end_cost = end_cost;
             this.date = date;
+            this.before = before;
+            this.after = after;
         }
     }
 
@@ -105,7 +113,8 @@ public class QueryExpense extends AppCompatActivity {
         }
         @Override
         protected Void doInBackground (SearchObject... searchObjects) {
-            searchData(searchObjects[0].start_cost, searchObjects[0].end_cost, searchObjects[0].date);
+            searchData(searchObjects[0].start_cost, searchObjects[0].end_cost, searchObjects[0].date,
+                    searchObjects[0].before, searchObjects[0].after);
             return null;
         }
         @Override
@@ -116,43 +125,59 @@ public class QueryExpense extends AppCompatActivity {
         }
     }
 
-    private void searchData(double startCostF, double endCostF, String dateF) {
+    private void searchData(double startCostF, double endCostF, String dateF, boolean beforeF, boolean afterF) {
 
         dbHelper = new ExpenseDbHelper(getApplicationContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor;
         String sortOrder =
                 ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " DESC";
+        String selection;
+        String[] selectionArgs;// = {Double.toString(startCostF), Double.toString(endCostF)};
         if( dateF.matches("")) {
-            String selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_COST + " BETWEEN ? AND ?";
-            String[] selectionArgs = {Double.toString(startCostF), Double.toString(endCostF)};
-             cursor = db.query(
-                    ExpenseContract.ExpenseEntry.TABLE_NAME,   // The table to query
-                    null,             // The array of columns to return (pass null to get all)
-                    selection,              // The columns for the WHERE clause
-                    selectionArgs,          // The values for the WHERE clause
-                    null,                   // don't group the rows
-                    null,                   // don't filter by row groups
-                    sortOrder               // The sort order
-            );
+            selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_COST + " BETWEEN ? AND ?";
+            selectionArgs = new String[2];
+            selectionArgs[0] = Double.toString(startCostF);
+            selectionArgs[1] = Double.toString(endCostF);
+        }
+        else if (beforeF && !afterF) {
+            selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_COST + " >= ? AND "+
+                    ExpenseContract.ExpenseEntry.COLUMN_NAME_COST + " <= ? AND "+
+                    ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " <= ?";
+            selectionArgs = new String[3];
+            selectionArgs[0] = Double.toString(startCostF);
+            selectionArgs[1] = Double.toString(endCostF);
+            selectionArgs[2] = dateF;
+        }
+        else if (!beforeF && afterF) {
+            selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_COST + " >= ? AND "+
+                    ExpenseContract.ExpenseEntry.COLUMN_NAME_COST + " <= ? AND "+
+                    ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " >= ?";
+            selectionArgs = new String[3];
+            selectionArgs[0] = Double.toString(startCostF);
+            selectionArgs[1] = Double.toString(endCostF);
+            selectionArgs[2] = dateF;
         }
         else {
             /*String selection = "(" + ExpenseContract.ExpenseEntry.COLUMN_NAME_COST + " BETWEEN ? AND ? ) AND " +
                     ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " = ?";*/
-            String selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_COST + " >= ? AND "+
+            selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_COST + " >= ? AND "+
                     ExpenseContract.ExpenseEntry.COLUMN_NAME_COST + " <= ? AND "+
                     ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " LIKE ?";
-            String[] selectionArgs = {Double.toString(startCostF), Double.toString(endCostF), dateF};
-            cursor = db.query(
-                    ExpenseContract.ExpenseEntry.TABLE_NAME,   // The table to query
-                    null,             // The array of columns to return (pass null to get all)
-                    selection,              // The columns for the WHERE clause
-                    selectionArgs,          // The values for the WHERE clause
-                    null,                   // don't group the rows
-                    null,                   // don't filter by row groups
-                    sortOrder               // The sort order
-            );
+            selectionArgs = new String[3];
+            selectionArgs[0] = Double.toString(startCostF);
+            selectionArgs[1] = Double.toString(endCostF);
+            selectionArgs[2] = dateF;
         }
+        cursor = db.query(
+                ExpenseContract.ExpenseEntry.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                sortOrder               // The sort order
+        );
         expenseList.clear();
         totalExpense = 0;
         while(cursor.moveToNext()) {

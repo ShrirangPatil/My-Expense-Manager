@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -34,11 +35,14 @@ public class DeleteExpense extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 EditText deleteDate = findViewById(R.id.mxm_delete_date);
+                CheckBox checkBoxBefore = findViewById(R.id.mxm_date_before);
+                CheckBox checkBoxAfter = findViewById(R.id.mxm_date_after);
                 if (expenseAdapter != null) {
                     expenseAdapter.clear();
                 }
                 if (AddExpense.checkDate(deleteDate.getText().toString())) {
-                        deleteData(AddExpense.inverseDate(deleteDate.getText().toString()));
+                        deleteData(AddExpense.inverseDate(deleteDate.getText().toString()),
+                                checkBoxBefore.isChecked(), checkBoxAfter.isChecked());
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Invalid Date!!", Toast.LENGTH_SHORT).show();
@@ -51,11 +55,15 @@ public class DeleteExpense extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 EditText deleteDate = findViewById(R.id.mxm_delete_date);
+                CheckBox checkBoxBefore = findViewById(R.id.mxm_date_before);
+                CheckBox checkBoxAfter = findViewById(R.id.mxm_date_after);
                 if (AddExpense.checkDate(deleteDate.getText().toString())) {
                     //searchData(AddExpense.inverseDate(deleteDate.getText().toString()));
                     expenseAdapter = new ExpenseAdapter(DeleteExpense.this, new ArrayList<Expense>());
                     SearchAsyncTask task = new SearchAsyncTask();
-                    task.execute(deleteDate.getText().toString());
+                    task.execute(new SearchObject(deleteDate.getText().toString(),
+                            checkBoxBefore.isChecked(),
+                            checkBoxAfter.isChecked()));
 
                     final ListView listView = findViewById(R.id.mxm_delete_list_view_expense);
                     listView.setAdapter(expenseAdapter);
@@ -75,16 +83,26 @@ public class DeleteExpense extends AppCompatActivity {
         });
 
     }
-
-    private class SearchAsyncTask extends AsyncTask<String, Void, Void> {
+    private class SearchObject {
+        String date;
+        boolean before;
+        boolean after;
+        SearchObject(String date, boolean before, boolean after) {
+            this.date = date;
+            this.before = before;
+            this.after = after;
+        }
+    }
+    private class SearchAsyncTask extends AsyncTask<SearchObject, Void, Void> {
 
         @Override
         protected void onPreExecute () {
             super.onPreExecute();
         }
         @Override
-        protected Void doInBackground (String... dates) {
-            searchData(AddExpense.inverseDate(dates[0]));
+        protected Void doInBackground (SearchObject... searchObjects) {
+            searchData(AddExpense.inverseDate(searchObjects[0].date), searchObjects[0].before,
+                    searchObjects[0].after);
             return null;
         }
         @Override
@@ -94,7 +112,7 @@ public class DeleteExpense extends AppCompatActivity {
         }
     }
 
-    private void deleteData(final String date) {
+    private void deleteData(final String date, final boolean beforeF, final boolean afterF) {
         //MyWorkerThread workerThread = new MyWorkerThread("deleteHandler");
         //workerThread.start();
         Handler handler = new Handler(MyWorkerThread.getWorkerThreadLooper());
@@ -103,7 +121,16 @@ public class DeleteExpense extends AppCompatActivity {
             @Override
             public void run() {
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
-                String selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " <= ?";
+                String selection;
+                if (beforeF && !afterF) {
+                    selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " <= ?";
+                }
+                else if(!beforeF && afterF) {
+                    selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " >= ?";
+                }
+                else {
+                    selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " LIKE ?";
+                }
                 String[] selectionArgs = { date };
                 int deletedRows = db.delete(ExpenseContract.ExpenseEntry.TABLE_NAME, selection, selectionArgs);
                 Toast.makeText(getApplicationContext(), "Deleted items = "+deletedRows, Toast.LENGTH_SHORT).show();
@@ -113,10 +140,19 @@ public class DeleteExpense extends AppCompatActivity {
         handler.post(runnable);
     }
 
-    private void searchData (final String dateF) {
+    private void searchData (final String dateF, final boolean beforeF, final boolean afterF) {
         dbHelper = new ExpenseDbHelper(getApplicationContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " <= ?";
+        String selection;
+        if (beforeF && !afterF) {
+            selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " <= ?";
+        }
+        else if(!beforeF && afterF) {
+            selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " >= ?";
+        }
+        else {
+            selection = ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " LIKE ?";
+        }
         String[] selectionArgs = { dateF };
         String sortOrder =
                 ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE + " DESC";

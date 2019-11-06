@@ -18,4 +18,7 @@
     <string name="delete_date">Data Will Get Deleted Till</string>
     <string name="add_expense">Add Expense</string>
     <string name="welcome">WELCOME</string>
+
+    <string name="before">Before</string>
+    <string name="after">After</string>
 </resources>
