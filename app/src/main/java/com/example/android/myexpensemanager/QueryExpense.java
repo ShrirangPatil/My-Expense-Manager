@@ -17,6 +17,9 @@ import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Search activity used to search the transactions in the database
+ */
 public class QueryExpense extends AppCompatActivity {
 
     private ExpenseDbHelper dbHelper = null;
@@ -90,6 +93,9 @@ public class QueryExpense extends AppCompatActivity {
 
     }
 
+    /**
+     * Custom class which is used to create objects that get searched in database
+     */
     private class SearchObject {
         double start_cost;
         double end_cost;
@@ -105,6 +111,10 @@ public class QueryExpense extends AppCompatActivity {
         }
     }
 
+    /**
+     * AsyncTask for searching data and populating the array adapter
+     * using a separate thread
+     */
     private class SearchAsyncTask extends AsyncTask<SearchObject, Void, Void> {
 
         @Override
@@ -125,6 +135,15 @@ public class QueryExpense extends AppCompatActivity {
         }
     }
 
+    /**
+     * Searches transactions in database using below parameters
+     * @param startCostF starting cost range
+     * @param endCostF ending cost range
+     * @param dateF transaction date
+     * @param beforeF delete all transaction before date
+     * @param afterF delete all transaction after date
+     * @param afterF
+     */
     private void searchData(double startCostF, double endCostF, String dateF, boolean beforeF, boolean afterF) {
 
         dbHelper = new ExpenseDbHelper(getApplicationContext());

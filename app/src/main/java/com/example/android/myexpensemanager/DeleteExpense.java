@@ -18,6 +18,9 @@ import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Activity to delete the transaction from the database
+ */
 public class DeleteExpense extends AppCompatActivity {
 
     private ExpenseDbHelper dbHelper = null;
@@ -83,6 +86,10 @@ public class DeleteExpense extends AppCompatActivity {
         });
 
     }
+
+    /**
+     * Custom class which is used to create objects that get searched in database
+     */
     private class SearchObject {
         String date;
         boolean before;
@@ -93,6 +100,11 @@ public class DeleteExpense extends AppCompatActivity {
             this.after = after;
         }
     }
+
+    /**
+     * AsyncTask for searching data and populating the array adapter
+     * using a separate thread
+     */
     private class SearchAsyncTask extends AsyncTask<SearchObject, Void, Void> {
 
         @Override
@@ -112,6 +124,12 @@ public class DeleteExpense extends AppCompatActivity {
         }
     }
 
+    /**
+     * deletes data from database using the WorkerThread
+     * @param date transaction date
+     * @param beforeF delete all transaction before date
+     * @param afterF delete all transaction after date
+     */
     private void deleteData(final String date, final boolean beforeF, final boolean afterF) {
         //MyWorkerThread workerThread = new MyWorkerThread("deleteHandler");
         //workerThread.start();
@@ -140,6 +158,12 @@ public class DeleteExpense extends AppCompatActivity {
         handler.post(runnable);
     }
 
+    /**
+     * Searches transactions in database using below parameters
+     * @param dateF transaction date
+     * @param beforeF delete all transaction before date
+     * @param afterF delete all transaction after date
+     */
     private void searchData (final String dateF, final boolean beforeF, final boolean afterF) {
         dbHelper = new ExpenseDbHelper(getApplicationContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();

@@ -14,6 +14,9 @@ import java.util.Calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * AddExpense activity adds the transactions to the database
+ */
 public class AddExpense extends AppCompatActivity {
 
     private EditText mCostET;
@@ -65,6 +68,10 @@ public class AddExpense extends AppCompatActivity {
         });
     }
 
+    /**
+     * adds the expense object into the database
+     * @param expense consists of cost, date, description
+     */
     public void insertData(final Expense expense) {
 
 
@@ -99,6 +106,11 @@ public class AddExpense extends AppCompatActivity {
         mDescET.setText("");
     }
 
+    /**
+     * Converts the date into the format which is saved as String in database
+     * @param date transaction date
+     * @return the formatted date
+     */
     public static String inverseDate (String date) {
         String[] splitDate = date.split("/");
         //For Date
@@ -111,6 +123,12 @@ public class AddExpense extends AppCompatActivity {
         }
         return (splitDate[2] + "/" +splitDate[1]+ "/" +splitDate[0]);
     }
+
+    /**
+     * checks the validity of date (Min Year Limit is 2000 Max Year Limit is current year)
+     * @param date
+     * @return true if it is valid else false
+     */
     public static boolean checkDate(String date) {
         try {
             String[] dateArray = date.split("/");

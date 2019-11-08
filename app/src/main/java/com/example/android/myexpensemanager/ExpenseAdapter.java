@@ -10,6 +10,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+/**
+ * ArrayAdapter class of type <Expense> used to get each
+ * list item view and populate them with data
+ * @param <E>
+ */
 public class ExpenseAdapter<E> extends ArrayAdapter<Expense> {
     final private String TAG = "ExpenseAdapter";
     Context mAppContext;

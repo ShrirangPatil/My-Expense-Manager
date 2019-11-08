@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * The main activity of application
+ */
 public class MainActivity extends AppCompatActivity {
 
     static String TAG = MainActivity.class.getName();
