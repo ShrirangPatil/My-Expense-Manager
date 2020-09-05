@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddExpense"
-    android:background="@color/background"
     android:orientation="vertical"
     android:padding="16dp">
     <TextView
@@ -33,30 +32,48 @@
         android:maxLength="100"
         android:padding="16dp"/>
 
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/date_edit_text"
-        android:id="@+id/mxm_date"
-        android:maxLength="10"
-        android:inputType="date"
-        android:padding="16dp"/>
+        android:orientation="horizontal">
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:hint="@string/date_edit_text"
+            android:id="@+id/mxm_date"
+            android:layout_weight="4"
+            android:maxLength="10"
+            android:inputType="date"
+            android:padding="16dp"/>
+        <ImageButton
+            android:id="@+id/mxm_calender"
+            android:layout_width="0dp"
+            android:contentDescription="@string/calender_button"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/baseline_calendar_today_black_18dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/add_button"
+            android:src="@drawable/baseline_add_black_18dp"
+            android:layout_margin="8dp"
+            android:id="@+id/mxm_addx"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/add_button"
-        android:textSize="16sp"
-        android:drawableStart="@drawable/baseline_add_black_18dp"
-        android:layout_margin="8dp"
-        android:id="@+id/mxm_addx"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/clear_button"
-        android:textSize="16sp"
-        android:drawableStart="@drawable/baseline_clear_black_18dp"
-        android:layout_margin="8dp"
-        android:id="@+id/mxm_clear"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/clear_button"
+            android:textSize="16sp"
+            android:src="@drawable/baseline_clear_black_18dp"
+            android:layout_margin="8dp"
+            android:id="@+id/mxm_clear"/>
+    </LinearLayout>
 </LinearLayout>

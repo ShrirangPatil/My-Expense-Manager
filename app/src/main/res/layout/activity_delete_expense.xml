@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background"
     android:padding="16dp"
     tools:context=".DeleteExpense">
     <TextView
@@ -18,6 +17,44 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cost_edit_text"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date"
+            android:layout_weight="1"
+            android:layout_marginLeft="8dp"
+            android:gravity="left"
+            android:textSize="20sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:orientation="vertical">
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mxm_delete_list_view_expense">
+        </ListView>
+        <!--Layout if list view is empty-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/empty_list"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
         <EditText
             android:layout_width="0dp"
@@ -42,47 +79,26 @@
                 android:text="@string/after"/>
         </LinearLayout>
     </LinearLayout>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/mxm_search_delete"
-        android:textSize="16sp"
-        android:layout_margin="8dp"
-        android:drawableStart="@drawable/baseline_search_black_18dp"
-        android:text="@string/search_button"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_margin="8dp"
-        android:drawableStart="@drawable/baseline_delete_forever_black_18dp"
-        android:id="@+id/mxm_delete_button"
-        android:text="@string/delete_button"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1.2"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cost_edit_text"
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="left"
-            android:textSize="20sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/date"
+            android:id="@+id/mxm_search_delete"
+            android:layout_margin="8dp"
+            android:src="@drawable/baseline_search_black_18dp"
+            android:contentDescription="@string/search_button"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_marginLeft="8dp"
-            android:gravity="left"
-            android:textSize="20sp"/>
+            android:layout_margin="8dp"
+            android:src="@drawable/baseline_delete_forever_black_18dp"
+            android:id="@+id/mxm_delete_button"
+            android:contentDescription="@string/delete_button"/>
     </LinearLayout>
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/list_background"
-        android:id="@+id/mxm_delete_list_view_expense">
-    </ListView>
-
 </LinearLayout>

@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,7 +34,7 @@ public class DeleteExpense extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_expense);
 
-        final Button deleteButton = findViewById(R.id.mxm_delete_button);
+        ImageButton deleteButton = findViewById(R.id.mxm_delete_button);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,7 +54,7 @@ public class DeleteExpense extends AppCompatActivity {
             }
         });
 
-        Button searchButton = findViewById(R.id.mxm_search_delete);
+        ImageButton searchButton = findViewById(R.id.mxm_search_delete);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

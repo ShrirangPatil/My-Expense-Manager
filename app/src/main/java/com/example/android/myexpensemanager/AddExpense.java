@@ -1,5 +1,6 @@
 package com.example.android.myexpensemanager;
 
+import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -7,7 +8,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -25,18 +28,25 @@ public class AddExpense extends AppCompatActivity {
     private static String TAG = AddExpense.class.getName();
     private ExpenseDbHelper dbHelper = null;
 
+    DatePickerDialog.OnDateSetListener mDateListerner = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            String date = day+"/"+month+"/"+year;
+            mDateET.setText(date);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
-
-        Button addButton = findViewById(R.id.mxm_addx);
+        mCostET = findViewById(R.id.mxm_cost);
+        mDescET = findViewById(R.id.mxm_desc);
+        mDateET = findViewById(R.id.mxm_date);
+        ImageButton addButton = findViewById(R.id.mxm_addx);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCostET = findViewById(R.id.mxm_cost);
-                mDescET = findViewById(R.id.mxm_desc);
-                mDateET = findViewById(R.id.mxm_date);
                 //Add the expense object
                 if ((!mCostET.getText().toString().matches("")) && (!mDescET.getText().toString().matches(""))) {
                     double cost = Double.parseDouble(mCostET.getText().toString());
@@ -56,7 +66,7 @@ public class AddExpense extends AppCompatActivity {
             }
         });
 
-        Button clearButton = findViewById(R.id.mxm_clear);
+        ImageButton clearButton = findViewById(R.id.mxm_clear);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,6 +74,17 @@ public class AddExpense extends AppCompatActivity {
                 mCostET.setText("");
                 mDescET.setText("");
                 mDateET.setText("");
+            }
+        });
+
+        ImageButton calenderButton = findViewById(R.id.mxm_calender);
+        calenderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(AddExpense.this, mDateListerner,
+                        Calendar.getInstance().get(Calendar.YEAR),
+                        Calendar.getInstance().get(Calendar.MONDAY),
+                        Calendar.getInstance().get(Calendar.DAY_OF_MONTH)).show();
             }
         });
     }

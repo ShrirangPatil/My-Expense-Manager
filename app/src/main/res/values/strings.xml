@@ -5,6 +5,7 @@
     <string name="search_button">Search</string>
     <string name="delete_button">Delete</string>
     <string name="clear_button">Clear</string>
+    <string name="calender_button">Calender</string>
 
 
     <string name="cost_edit_text">Cost</string>
@@ -21,4 +22,6 @@
 
     <string name="before">Before</string>
     <string name="after">After</string>
+    <integer name="date_picker_id">999</integer>
+    <string name="empty_list">No Results!</string>
 </resources>
