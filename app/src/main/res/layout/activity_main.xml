@@ -1,53 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:textSize="24sp"
-        android:text="@string/welcome"
-        android:layout_marginBottom="16dp"
-        android:gravity="center"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:id="@+id/mxm_about"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp"
-        android:gravity="center"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/add_button"
-        android:textSize="24sp"
-        android:layout_margin="8dp"
-        android:textColor="@android:color/black"
-        android:drawableStart="@drawable/baseline_add_circle_black_18dp"
-        android:id="@+id/mxm_add"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/search_button"
-        android:layout_margin="8dp"
-        android:textSize="24sp"
-        android:drawableStart="@drawable/baseline_search_black_18dp"
-        android:textColor="@android:color/black"
-        android:id="@+id/mxm_search"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/delete_button"
-        android:layout_margin="8dp"
-        android:textSize="24sp"
-        android:drawableStart="@drawable/baseline_delete_forever_black_18dp"
-        android:textColor="@android:color/black"
-        android:id="@+id/mxm_delete"/>
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:background="#C7FFFD"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/mxm_add"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/add_button"
+            android:src="@drawable/add_96" />
+
+        <ImageButton
+            android:id="@+id/mxm_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/search_button"
+            android:src="@drawable/search_96" />
+
+        <ImageButton
+            android:id="@+id/mxm_delete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/delete_button"
+            android:src="@drawable/remove_96" />
+    </LinearLayout>
+</RelativeLayout>
