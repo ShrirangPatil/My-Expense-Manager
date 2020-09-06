@@ -1,19 +1,23 @@
 package com.example.android.myexpensemanager;
 
+import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,19 +31,30 @@ public class QueryExpense extends AppCompatActivity {
     private static String TAG = QueryExpense.class.getName();
     private double totalExpense = 0;
     private ExpenseAdapter expenseAdapter;
+    private EditText dateCost;
+    protected DatePickerDialog.OnDateSetListener mDateListerner = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            String date = day+"/"+month+"/"+year;
+            dateCost.setText(date);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_query_expense);
-
+        androidx.appcompat.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        dateCost = findViewById(R.id.mxm_search_date);
         ImageButton searchButton = findViewById(R.id.mxm_query_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EditText startCost = findViewById(R.id.mxm_start);
                 EditText endCost = findViewById(R.id.mxm_end);
-                EditText dateCost = findViewById(R.id.mxm_search_date);
                 CheckBox checkBoxBefore = findViewById(R.id.mxm_date_before);
                 CheckBox checkBoxAfter = findViewById(R.id.mxm_date_after);
 
@@ -76,6 +91,17 @@ public class QueryExpense extends AppCompatActivity {
                 SearchAsyncTask task = new SearchAsyncTask();
                 task.execute(new SearchObject(start_cost, end_cost, on_date,
                         checkBoxBefore.isChecked(), checkBoxAfter.isChecked()));
+            }
+        });
+
+        ImageButton calenderButton = findViewById(R.id.mxm_calender);
+        calenderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(QueryExpense.this, mDateListerner,
+                        Calendar.getInstance().get(Calendar.YEAR),
+                        Calendar.getInstance().get(Calendar.MONDAY),
+                        Calendar.getInstance().get(Calendar.DAY_OF_MONTH)).show();
             }
         });
 
@@ -219,5 +245,14 @@ public class QueryExpense extends AppCompatActivity {
         if (dbHelper != null) {
             dbHelper.close();
         }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

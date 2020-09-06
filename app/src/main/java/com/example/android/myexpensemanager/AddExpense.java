@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -40,6 +40,11 @@ public class AddExpense extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
+        androidx.appcompat.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         mCostET = findViewById(R.id.mxm_cost);
         mDescET = findViewById(R.id.mxm_desc);
         mDateET = findViewById(R.id.mxm_date);
@@ -147,7 +152,7 @@ public class AddExpense extends AppCompatActivity {
 
     /**
      * checks the validity of date (Min Year Limit is 2000 Max Year Limit is current year)
-     * @param date
+     * @param date date in the format dd/mm/yyyy
      * @return true if it is valid else false
      */
     public static boolean checkDate(String date) {
@@ -214,6 +219,15 @@ public class AddExpense extends AppCompatActivity {
         if (dbHelper != null) {
             dbHelper.close();
         }
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

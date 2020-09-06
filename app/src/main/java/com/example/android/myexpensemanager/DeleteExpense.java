@@ -1,21 +1,24 @@
 package com.example.android.myexpensemanager;
 
+import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,24 +31,35 @@ public class DeleteExpense extends AppCompatActivity {
     private ArrayList<Expense> expenseList = new ArrayList<>();
     private static String TAG = DeleteExpense.class.getName();
     private ExpenseAdapter expenseAdapter = null;
+    private EditText mDeleteDate;
+    protected DatePickerDialog.OnDateSetListener mDateListerner = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            String date = day+"/"+month+"/"+year;
+            mDeleteDate.setText(date);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_expense);
-
+        androidx.appcompat.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         ImageButton deleteButton = findViewById(R.id.mxm_delete_button);
+        mDeleteDate = findViewById(R.id.mxm_delete_date);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText deleteDate = findViewById(R.id.mxm_delete_date);
                 CheckBox checkBoxBefore = findViewById(R.id.mxm_date_before);
                 CheckBox checkBoxAfter = findViewById(R.id.mxm_date_after);
                 if (expenseAdapter != null) {
                     expenseAdapter.clear();
                 }
-                if (AddExpense.checkDate(deleteDate.getText().toString())) {
-                        deleteData(AddExpense.inverseDate(deleteDate.getText().toString()),
+                if (AddExpense.checkDate(mDeleteDate.getText().toString())) {
+                        deleteData(AddExpense.inverseDate(mDeleteDate.getText().toString()),
                                 checkBoxBefore.isChecked(), checkBoxAfter.isChecked());
                 }
                 else {
@@ -86,6 +100,16 @@ public class DeleteExpense extends AppCompatActivity {
             }
         });
 
+        ImageButton calenderButton = findViewById(R.id.mxm_calender);
+        calenderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(DeleteExpense.this, mDateListerner,
+                        Calendar.getInstance().get(Calendar.YEAR),
+                        Calendar.getInstance().get(Calendar.MONDAY),
+                        Calendar.getInstance().get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
     }
 
     /**
@@ -209,5 +233,14 @@ public class DeleteExpense extends AppCompatActivity {
         if (dbHelper != null) {
             dbHelper.close();
         }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
