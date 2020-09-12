@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.android.myexpensemanager.MainActivity">
+    <item
+        android:id="@+id/mxm_settings"
+        android:orderInCategory="1"
+        android:title="@string/action_settings"/>
+</menu>

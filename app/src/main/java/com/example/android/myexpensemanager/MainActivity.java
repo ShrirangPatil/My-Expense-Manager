@@ -3,6 +3,8 @@ package com.example.android.myexpensemanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -18,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         ImageButton addButton = findViewById(R.id.mxm_add);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,8 +58,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_list, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         MyWorkerThread.quitWorker();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.mxm_settings:
+                Intent settingsIntent = new Intent();
+                settingsIntent.setClass(MainActivity.this, Settings.class);
+                startActivity(settingsIntent);
+                Log.i(TAG, "Settings Activity Launched");
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
