@@ -25,11 +25,24 @@
         android:layout_height="wrap_content"
         android:id="@+id/mxm_currency_list">
     </ListView>
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:id="@+id/mxm_convert_currency"
-        android:text="@string/convert_button"/>
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:id="@+id/mxm_convert_currency"
+            android:text="@string/convert_button"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:id="@+id/mxm_base_currency"
+            android:text="@string/base_button"/>
+    </LinearLayout>
 
 </LinearLayout>

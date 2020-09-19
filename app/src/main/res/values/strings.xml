@@ -7,6 +7,7 @@
     <string name="clear_button">Clear</string>
     <string name="calender_button">Calender</string>
     <string name="convert_button">Convert</string>
+    <string name="base_button">Refactor</string>
 
     <string name="cost_edit_text">Cost</string>
     <string name="desc_edit_text">Description</string>

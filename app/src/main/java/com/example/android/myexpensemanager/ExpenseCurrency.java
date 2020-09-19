@@ -1,5 +1,6 @@
 package com.example.android.myexpensemanager;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -25,7 +26,14 @@ import java.util.Map;
  */
 public class ExpenseCurrency {
     static private String TAG = ExpenseCurrency.class.getName();
-    static private final String mRequestURL = "https://api.exchangeratesapi.io/latest?base=INR";
+    public static SharedPreferences mCurrencyChoicePref = null;
+    static private String mRequestURL = "https://api.exchangeratesapi.io/latest?base=INR";
+    public static void setBaseCurrency(String base) {
+        base = "="+base;
+        Log.i(TAG, mRequestURL);
+        mRequestURL = mRequestURL.split("=")[0].concat(base);
+        Log.i(TAG, mRequestURL);
+    }
     static final Map<String, String> mCurrencyNameHash = new HashMap<String, String>() {
         {
             put("Australian dollar", "AUD");

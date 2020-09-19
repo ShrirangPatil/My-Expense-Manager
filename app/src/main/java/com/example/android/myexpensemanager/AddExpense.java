@@ -54,7 +54,14 @@ public class AddExpense extends AppCompatActivity {
             public void onClick(View view) {
                 //Add the expense object
                 if ((!mCostET.getText().toString().matches("")) && (!mDescET.getText().toString().matches(""))) {
-                    double cost = Double.parseDouble(mCostET.getText().toString());
+                    double expenseRate = 1.0;
+                    if (ExpenseCurrency.mCurrencyChoicePref != null) {
+                        String key = ExpenseCurrency.mCurrencyChoicePref.getString(getString(R.string.preference_currency), null);
+                        if (key != null) {
+                            expenseRate = ExpenseCurrency.mCurrencyRatesHash.get(key);
+                        }
+                    }
+                    double cost = Double.parseDouble(mCostET.getText().toString()) / expenseRate;
                     String desc = mDescET.getText().toString();
                     String date = mDateET.getText().toString();
 

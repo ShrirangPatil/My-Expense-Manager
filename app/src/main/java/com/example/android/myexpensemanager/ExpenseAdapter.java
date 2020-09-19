@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -34,7 +36,9 @@ public class ExpenseAdapter<E> extends ArrayAdapter<Expense> {
         }
 
         TextView costView = listItemView.findViewById(R.id.mxm_display_cost);
-        costView.setText(""+expense.getCost());
+        DecimalFormat df = new DecimalFormat("#.####");
+        df.setRoundingMode(RoundingMode.CEILING);
+        costView.setText(""+df.format(expense.getCost()));
 
         TextView dateView = listItemView.findViewById(R.id.mxm_display_date);
         dateView.setText(""+expense.getDate());
