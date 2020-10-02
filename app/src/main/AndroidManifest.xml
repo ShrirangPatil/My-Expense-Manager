@@ -12,11 +12,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/round_button" />
+
         <activity
             android:name=".VRExpense"
-            android:label="Voice Recognition"/>
-        <activity
-            android:name=".Settings" />
+            android:label="Voice Recognition" />
+        <activity android:name=".Settings" />
         <activity
             android:name=".DeleteExpense"
             android:label="Delete Expense"

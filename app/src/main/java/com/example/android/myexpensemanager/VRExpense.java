@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,7 @@ public class VRExpense extends AppCompatActivity {
     static String TAG = MainActivity.class.getName();
     SpeechRecognizer mRecognizer = null;
     private static final int RECORD_PERMISSION_CODE = 101;
+    TextView mTextView = null;
     RecognitionListener listener = new RecognitionListener() {
         @Override
         public void onResults(Bundle results) {
@@ -34,9 +36,12 @@ public class VRExpense extends AppCompatActivity {
                 Log.i(TAG,"No voice results");
             } else {
                 Log.i(TAG,"Printing matches: ");
+                StringBuilder stringBuilder = new StringBuilder();
                 for (String match : voiceResults) {
+                    stringBuilder.append(match+"\n");
                     Log.i(TAG, ""+match);
                 }
+                mTextView.setText(stringBuilder.toString());
             }
         }
 
@@ -108,6 +113,7 @@ public class VRExpense extends AppCompatActivity {
                     RECORD_PERMISSION_CODE);
         }
         mRecognizer = SpeechRecognizer.createSpeechRecognizer(this.getApplicationContext());
+        mTextView = findViewById(R.id.test_print);
         Button startVR = findViewById(R.id.test_start);
         startVR.setOnClickListener(new View.OnClickListener() {
             @Override
