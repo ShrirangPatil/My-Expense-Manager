@@ -20,6 +20,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ImageButton vrButton = findViewById(R.id.mxm_speech_recognizer);
+        vrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent to Add Activity
+                Intent addIntent = new Intent();
+                addIntent.setClass(MainActivity.this, VRExpense.class);
+                Log.i(TAG, "VoiceRecogExpense Activity Launched");
+                startActivity(addIntent);
+            }
+        });
         ImageButton addButton = findViewById(R.id.mxm_add);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
