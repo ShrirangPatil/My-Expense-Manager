@@ -31,6 +31,7 @@ public class AddExpense extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener mDateListerner = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            month += 1;
             String date = day+"/"+month+"/"+year;
             mDateET.setText(date);
         }
@@ -48,6 +49,11 @@ public class AddExpense extends AppCompatActivity {
         mCostET = findViewById(R.id.mxm_cost);
         mDescET = findViewById(R.id.mxm_desc);
         mDateET = findViewById(R.id.mxm_date);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mDateET.setText(bundle.getString(VRExpense.DATE_KEY_CODE));
+            mCostET.setText(Double.toString(bundle.getDouble(VRExpense.PRICE_KEY_CODE)));
+        }
         ImageButton addButton = findViewById(R.id.mxm_addx);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +101,7 @@ public class AddExpense extends AppCompatActivity {
             public void onClick(View view) {
                 new DatePickerDialog(AddExpense.this, mDateListerner,
                         Calendar.getInstance().get(Calendar.YEAR),
-                        Calendar.getInstance().get(Calendar.MONDAY),
+                        Calendar.getInstance().get(Calendar.MONTH),
                         Calendar.getInstance().get(Calendar.DAY_OF_MONTH)).show();
             }
         });

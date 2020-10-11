@@ -15,7 +15,7 @@ public class MyWorkerThread extends HandlerThread {
 
     public static Looper getWorkerThreadLooper() {
         if (workerThread == null) {
-            workerThread = new MyWorkerThread("dbOperationHandler");
+            workerThread = new MyWorkerThread("dBVrOperationHandler");
             workerThread.start();
         }
         return workerThread.getLooper();

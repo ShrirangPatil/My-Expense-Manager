@@ -35,6 +35,7 @@ public class QueryExpense extends AppCompatActivity {
     protected DatePickerDialog.OnDateSetListener mDateListerner = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            month += 1;
             String date = day+"/"+month+"/"+year;
             dateCost.setText(date);
         }
@@ -100,7 +101,7 @@ public class QueryExpense extends AppCompatActivity {
             public void onClick(View view) {
                 new DatePickerDialog(QueryExpense.this, mDateListerner,
                         Calendar.getInstance().get(Calendar.YEAR),
-                        Calendar.getInstance().get(Calendar.MONDAY),
+                        Calendar.getInstance().get(Calendar.MONTH),
                         Calendar.getInstance().get(Calendar.DAY_OF_MONTH)).show();
             }
         });

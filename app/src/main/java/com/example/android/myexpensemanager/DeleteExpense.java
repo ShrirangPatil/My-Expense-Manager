@@ -35,6 +35,7 @@ public class DeleteExpense extends AppCompatActivity {
     protected DatePickerDialog.OnDateSetListener mDateListerner = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            month += 1;
             String date = day+"/"+month+"/"+year;
             mDeleteDate.setText(date);
         }
