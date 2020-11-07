@@ -4,11 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="20"
     android:padding="8dp"
     tools:context=".QueryExpense">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1.2"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -31,13 +33,21 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
+        android:background="@color/background"
+        android:layout_weight="17"
         android:id="@+id/mxm_list_view_expense">
     </ListView>
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:src="@drawable/baseline_expand_more_black_18dp"
+        android:id="@+id/mxm_query_drag"
+        android:layout_weight="1.5"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.4"
+        android:layout_weight="0"
+        android:id="@+id/mxm_start_end_lin"
         android:orientation="horizontal">
         <EditText
             android:layout_width="wrap_content"
@@ -59,7 +69,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.1"
+        android:layout_weight="0"
+        android:id="@+id/mxm_date_lin"
         android:orientation="horizontal">
         <EditText
             android:layout_width="0dp"
@@ -93,7 +104,7 @@
     <ImageButton
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0"
         android:id="@+id/mxm_query_button"
         android:src="@drawable/baseline_search_black_18dp"
         android:layout_margin="8dp"

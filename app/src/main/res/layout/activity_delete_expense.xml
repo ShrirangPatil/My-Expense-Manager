@@ -34,6 +34,7 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/background"
             android:id="@+id/mxm_delete_list_view_expense">
         </ListView>
         <!--Layout if list view is empty-->

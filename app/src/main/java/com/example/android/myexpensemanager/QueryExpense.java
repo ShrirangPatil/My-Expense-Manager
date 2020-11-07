@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -49,6 +50,29 @@ public class QueryExpense extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        SearchAsyncTask task = new SearchAsyncTask();
+        task.execute(new SearchObject(0, Double.MAX_VALUE, "",
+                false, false));
+        ImageButton dragButton = findViewById(R.id.mxm_query_drag);
+        dragButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 13 2 2 1.5 0
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
+                params.weight = (float) 12.5;
+                findViewById(R.id.mxm_list_view_expense).setLayoutParams(params);
+                params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
+                params.weight = 2;
+                findViewById(R.id.mxm_start_end_lin).setLayoutParams(params);
+                findViewById(R.id.mxm_date_lin).setLayoutParams(params);
+                params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
+                params.weight = (float) 1.5;
+                findViewById(R.id.mxm_query_button).setLayoutParams(params);
+                params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
+                params.weight = 0;
+                findViewById(R.id.mxm_query_drag).setLayoutParams(params);
+            }
+        });
         dateCost = findViewById(R.id.mxm_search_date);
         ImageButton searchButton = findViewById(R.id.mxm_query_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +116,21 @@ public class QueryExpense extends AppCompatActivity {
                 SearchAsyncTask task = new SearchAsyncTask();
                 task.execute(new SearchObject(start_cost, end_cost, on_date,
                         checkBoxBefore.isChecked(), checkBoxAfter.isChecked()));
+
+                // 17 0 0 0 1.5
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
+                params.weight = (float) 17;
+                findViewById(R.id.mxm_list_view_expense).setLayoutParams(params);
+                params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
+                params.weight = 0;
+                findViewById(R.id.mxm_start_end_lin).setLayoutParams(params);
+                findViewById(R.id.mxm_date_lin).setLayoutParams(params);
+                params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
+                params.weight = (float) 0;
+                findViewById(R.id.mxm_query_button).setLayoutParams(params);
+                params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
+                params.weight = (float) 1.5;
+                findViewById(R.id.mxm_query_drag).setLayoutParams(params);
             }
         });
 

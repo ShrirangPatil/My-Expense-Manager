@@ -27,6 +27,12 @@ public class VRExpense extends AppCompatActivity {
     public static final String PRICE_KEY_CODE = "price_key_code";
     public static final String DATE_KEY_CODE = "date_key_code";
     private static final int RECORD_PERMISSION_CODE = 101;
+    private boolean mFoundDate = false;
+    private String[] mDate = {"", "", ""};
+    private boolean mFoundPrice = false;
+    private double mPrice = 0;
+    private  boolean mFoundOperation = false;
+
     final RecognitionListener listener = new RecognitionListener() {
         @Override
         public void onResults(Bundle results) {
@@ -43,18 +49,13 @@ public class VRExpense extends AppCompatActivity {
                     int index = 0;
                     try {
                         if (voiceResults != null) {
-                            float maxConfidence = -1;
-                            String maxConfidenceString = "";
                             assert confidenceScore != null;
                             for(String res : voiceResults) {
                                 Log.i(TAG, "result = " + res + " score = " + confidenceScore[index]);
-                                if (maxConfidence < confidenceScore[index]) {
-                                    Log.i(TAG,"maxConfStr"+res);
-                                    maxConfidenceString = res;
-                                    maxConfidence = confidenceScore[index++];
+                                if (!mFoundDate || !mFoundOperation || !mFoundPrice) {
+                                    analyzeRecord(res);
                                 }
                             }
-                            analyzeRecord(maxConfidenceString);
                         } else {
                             Log.i(TAG, "voice result is null");
                         }
@@ -63,6 +64,11 @@ public class VRExpense extends AppCompatActivity {
                     }
                 }
             };
+            mFoundDate = false;
+            mFoundOperation = false;
+            mFoundPrice = false;
+            mDate[0] = mDate[1] = mDate[2] = "";
+            mPrice = 0;
 //            Thread tokenThread = new Thread(tokenizeRunnable, "tokenThread");
 //            tokenThread.start();
             Handler handler = new Handler();
@@ -151,6 +157,7 @@ public class VRExpense extends AppCompatActivity {
                 String month = months[j];
                 try {
                     if (splitStr[i].toLowerCase().contains(month)) {
+                        mFoundDate =true;
                         date[1] = Integer.valueOf(j + 1).toString();
                         Integer left = Integer.parseInt(splitStr[i - 1]
                                 .toLowerCase()
@@ -173,6 +180,7 @@ public class VRExpense extends AppCompatActivity {
                         }
                         break;
                     } else if (Integer.parseInt(splitStr[i]) > 0) {
+                        mFoundDate = true;
                         if (i + 1 < splitStr.length && Integer.parseInt(splitStr[i + 1]) > 0) {
                             if (i + 2 < splitStr.length && Integer.parseInt(splitStr[i + 2]) > 0) {
                                 if (AddExpense.checkDate(splitStr[i] + "/" + splitStr[i + 1] + "/" + splitStr[i + 2])) {
@@ -211,6 +219,7 @@ public class VRExpense extends AppCompatActivity {
                         }
                     }
                     if (isPrice) {
+                        mFoundPrice = true;
                         price = Double.parseDouble(s);
                         break;
                     }
@@ -227,20 +236,25 @@ public class VRExpense extends AppCompatActivity {
     public void analyzeRecord(String result) {
         Log.d(TAG, "In analyzeRecord");
         /* check the date */
-        String[] date = recognizeDate(result);
-        Log.i(TAG, "Date = "+date[0]+"/"+date[1]+"/"+date[2]);
+        if (!mFoundDate) {
+            mDate = recognizeDate(result);
+        }
+        Log.i(TAG, "Date = "+mDate[0]+"/"+mDate[1]+"/"+mDate[2]);
         /* check the price */
-        double price = recognizePrice(result, date);
-        Log.i(TAG, "Price = "+price);
+        if (!mFoundPrice) {
+            mPrice = recognizePrice(result, mDate);
+        }
+        Log.i(TAG, "Price = "+mPrice);
         /* check the operation */
         for (String str : result.split(" ")) {
             Log.d(TAG, str);
-            if (recognizeAdd(str)) {
+            if (!mFoundOperation && recognizeAdd(str)) {
+                mFoundOperation = true;
                 Log.i(TAG, "Add found");
                 Intent addIntent = new Intent();
                 Bundle bundle = new Bundle();
-                bundle.putDouble(PRICE_KEY_CODE, price);
-                bundle.putString(DATE_KEY_CODE, date[0]+"/"+date[1]+"/"+date[2]);
+                bundle.putDouble(PRICE_KEY_CODE, mPrice);
+                bundle.putString(DATE_KEY_CODE, mDate[0]+"/"+mDate[1]+"/"+mDate[2]);
                 addIntent.setClass(VRExpense.this, AddExpense.class);
                 addIntent.putExtras(bundle);
                 Log.i(TAG, "AddExpense Activity Launched");
