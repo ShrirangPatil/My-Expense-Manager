@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <ImageButton
@@ -11,41 +13,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:contentDescription="@string/add_button"
+        android:contentDescription="@string/vr_button"
         android:src="@drawable/microphone_96" />
 
-    <LinearLayout
+    <ImageButton
+        android:id="@+id/mxm_graph"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="bottom"
-        android:orientation="horizontal">
+        android:padding="16dp"
+        android:contentDescription="@string/graph_button"
+        android:src="@drawable/chart_96"/>
 
-        <ImageButton
-            android:id="@+id/mxm_add"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/add_button"
-            android:src="@drawable/add_96" />
+    <ImageButton
+        android:id="@+id/mxm_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:contentDescription="@string/add_button"
+        android:src="@drawable/add_96" />
 
-        <ImageButton
-            android:id="@+id/mxm_search"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/search_button"
-            android:src="@drawable/search_96" />
+    <ImageButton
+        android:id="@+id/mxm_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:contentDescription="@string/search_button"
+        android:src="@drawable/search_96" />
 
-        <ImageButton
-            android:id="@+id/mxm_delete"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/delete_button"
-            android:src="@drawable/remove_96" />
-    </LinearLayout>
-</RelativeLayout>
+    <ImageButton
+        android:id="@+id/mxm_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:contentDescription="@string/delete_button"
+        android:src="@drawable/remove_96" />
+</LinearLayout>

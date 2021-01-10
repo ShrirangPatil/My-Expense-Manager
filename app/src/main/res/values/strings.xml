@@ -8,6 +8,8 @@
     <string name="calender_button">Calender</string>
     <string name="convert_button">Convert</string>
     <string name="base_button">Refactor</string>
+    <string name="vr_button">VR</string>
+    <string name="graph_button">Graphs</string>
 
     <string name="cost_edit_text">Cost</string>
     <string name="desc_edit_text">Description</string>

@@ -1,6 +1,5 @@
 package com.example.android.myexpensemanager;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.SQLException;
@@ -18,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +38,7 @@ public class Settings extends AppCompatActivity {
     private Button mBaseButton;
     private TextView mOldCurrency;
     private ArrayAdapter<String> mCurrencyListAdapter;
-    private ProgressDialog mProgressDialog;
+    private ProgressBar mProgressBar;
     private boolean mBaseCurrencyChange = false;
     private double mOldCurrencyRate = 1.0;
 
@@ -125,10 +125,8 @@ public class Settings extends AppCompatActivity {
     private class FetchAsyncTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
-            mProgressDialog = new ProgressDialog(Settings.this);
-            mProgressDialog.setMessage("Loading Please wait...");
-            mProgressDialog.setIndeterminate(false);
-            mProgressDialog.show();
+            mProgressBar = findViewById(R.id.mxm_progress_bar);
+            mProgressBar.setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
 
@@ -140,7 +138,8 @@ public class Settings extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            mProgressDialog.dismiss();
+            mProgressBar.setVisibility(View.GONE);
+            setProgressBarIndeterminateVisibility(false);
             if (!ExpenseCurrency.mCurrencyRatesHash.isEmpty()) {
                 String key = ExpenseCurrency.mCurrencyChoicePref.getString(getString(R.string.preference_currency), null);
                 if (key == null) {

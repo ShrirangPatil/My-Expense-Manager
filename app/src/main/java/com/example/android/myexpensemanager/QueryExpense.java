@@ -1,6 +1,8 @@
 package com.example.android.myexpensemanager;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -17,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -57,9 +61,9 @@ public class QueryExpense extends AppCompatActivity {
         dragButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 13 2 2 1.5 0
+                // 14.5 2 2 1.5 0
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
-                params.weight = (float) 12.5;
+                params.weight = (float) 14.5;
                 findViewById(R.id.mxm_list_view_expense).setLayoutParams(params);
                 params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
                 params.weight = 2;
@@ -119,7 +123,7 @@ public class QueryExpense extends AppCompatActivity {
 
                 // 17 0 0 0 1.5
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
-                params.weight = (float) 17;
+                params.weight = (float) 18.5;
                 findViewById(R.id.mxm_list_view_expense).setLayoutParams(params);
                 params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0);
                 params.weight = 0;
@@ -153,7 +157,20 @@ public class QueryExpense extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Expense expense = (Expense) listView.getItemAtPosition(position);
-                Toast.makeText(QueryExpense.this,expense.getDesc(),Toast.LENGTH_LONG).show();
+                //Toast.makeText(QueryExpense.this,expense.getDesc(),Toast.LENGTH_LONG).show();
+                if (expense.getDate() != "null" && expense.getDesc() != "null" && expense.getCost() != 0) {
+                    final AlertDialog dialog = new AlertDialog.Builder(QueryExpense.this).create();
+                    DecimalFormat df = new DecimalFormat("#.####");
+                    df.setRoundingMode(RoundingMode.CEILING);
+                    dialog.setMessage("Date: " + expense.getDate() + "\nCost: " + df.format(expense.getCost()) + "\nDescription: " + expense.getDesc());
+                    dialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialog.cancel();
+                        }
+                    });
+                    dialog.show();
+                }
             }
         });
 
@@ -265,6 +282,9 @@ public class QueryExpense extends AppCompatActivity {
         );
         expenseList.clear();
         totalExpense = 0;
+        String month = "";
+        String year = "";
+        boolean initial = true;
         while(cursor.moveToNext()) {
             double cost = cursor.getDouble(
                     cursor.getColumnIndexOrThrow(ExpenseContract.ExpenseEntry.COLUMN_NAME_COST));
@@ -272,6 +292,23 @@ public class QueryExpense extends AppCompatActivity {
                     cursor.getColumnIndexOrThrow(ExpenseContract.ExpenseEntry.COLUMN_NAME_DESCRIPTION));
             String date = cursor.getString(
                     cursor.getColumnIndexOrThrow(ExpenseContract.ExpenseEntry.COLUMN_NAME_DATE));
+            String splitDate[] = date.split("/");
+            if (initial) {
+                month = splitDate[1];
+                year = splitDate[0];
+                initial = false;
+            }
+            Log.d(TAG, ""+(month != splitDate[1] || year != splitDate[2]));
+            Log.d(TAG, month+splitDate[1]+year+splitDate[0]);
+            if (month.equals(splitDate[1]) && year.equals(splitDate[0])) {
+            } else {
+                /**
+                 * Adding null values in expense list for spacing
+                 */
+                expenseList.add(new Expense(0, "null", "null"));
+                month = splitDate[1];
+                year = splitDate[0];
+            }
             totalExpense += cost;
             expenseList.add(new Expense(cost, desc, AddExpense.inverseDate(date)));
         }

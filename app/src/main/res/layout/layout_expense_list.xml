@@ -3,19 +3,16 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="left"
-        android:layout_margin="8dp"
-        android:id="@+id/mxm_display_cost"
-        android:textSize="20sp"/>
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_margin="8dp">
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/mxm_bullet_point"
+            android:src="@drawable/moon_96" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -23,9 +20,12 @@
             android:gravity="left"
             android:id="@+id/mxm_display_date"
             android:textSize="20sp"/>
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/baseline_label_black_18dp" />
+<!--        <TextView-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="left"-->
+<!--            android:id="@+id/mxm_display_cost"-->
+<!--            android:textSize="20sp"/>-->
     </LinearLayout>
 </LinearLayout>

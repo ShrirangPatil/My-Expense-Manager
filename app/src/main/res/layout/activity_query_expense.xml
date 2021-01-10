@@ -7,34 +7,11 @@
     android:weightSum="20"
     android:padding="8dp"
     tools:context=".QueryExpense">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.2"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cost_edit_text"
-            android:layout_weight="1"
-            android:layout_margin="8dp"
-            android:gravity="left"
-            android:textSize="20sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/date"
-            android:layout_weight="1"
-            android:layout_marginLeft="8dp"
-            android:gravity="left"
-            android:textSize="20sp"/>
-    </LinearLayout>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/background"
-        android:layout_weight="17"
+        android:layout_weight="19"
         android:id="@+id/mxm_list_view_expense">
     </ListView>
     <ImageButton

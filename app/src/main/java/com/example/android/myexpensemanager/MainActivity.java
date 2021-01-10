@@ -32,6 +32,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(addIntent);
             }
         });
+
+        ImageButton graphButton = findViewById(R.id.mxm_graph);
+        graphButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent to Add Activity
+                Intent addIntent = new Intent();
+                addIntent.setClass(MainActivity.this, GraphExpense.class);
+                Log.i(TAG, "Graph Activity Launched");
+                startActivity(addIntent);
+            }
+        });
+
         ImageButton addButton = findViewById(R.id.mxm_add);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
