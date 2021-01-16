@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -86,14 +85,7 @@ public class DeleteExpense extends AppCompatActivity {
 
                     final ListView listView = findViewById(R.id.mxm_delete_list_view_expense);
                     listView.setAdapter(expenseAdapter);
-                    listView.setClickable(true);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                            Expense expense = (Expense) listView.getItemAtPosition(position);
-                            Toast.makeText(DeleteExpense.this,expense.getDesc(),Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    listView.setClickable(false);
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Invalid Date!!", Toast.LENGTH_SHORT).show();

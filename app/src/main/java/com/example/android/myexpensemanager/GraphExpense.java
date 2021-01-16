@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +15,12 @@ public class GraphExpense extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_expense);
+        LinearLayout linearLayout = findViewById(R.id.mxm_graph_view);
+        GraphView graphView = new GraphView(this);
+        linearLayout.addView(graphView);
+    }
+
+    private void getDataPoints() {
         Intent intent = getIntent();
         Bundle bundle = null;//intent.getExtras().getBundle("some_key");
 //        ArrayList<DataPoint> arrayListPoints = new ArrayList<>();
