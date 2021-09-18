@@ -1,6 +1,8 @@
 from django.shortcuts import render
 import json
 from django.http import HttpResponse
+from django.middleware import csrf
+from django.views.decorators.csrf import csrf_exempt
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -29,22 +31,28 @@ def draw_map(x_cord, y_cord, tick_label):
     image_drawn = True
     #image = drawMap()
 
-
+@csrf_exempt
 def home(request):
-    if request.method == "GET":
+    if request.method == "POST":
+        print("Got http POST request")
         if request.body != None:
+            print("request body is not None")
             received_json_data = json.loads(request.body)
             y_cord = received_json_data["val_daily_expen"]
             x_cord = [ i for i in range(len(y_cord))]
             tick_label = received_json_data["key_daily_expen"]
             print(x_cord, y_cord, tick_label, sep="\n")
             draw_map(x_cord, y_cord, tick_label)
-        try:
-            with open('mapserverapp/static/media/mapserverapp/expense_plot.png', 'rb') as fh:
-                response = HttpResponse(fh.read(), content_type="image/png")
-                response['Content-Disposition'] = 'inline; filename=' + 'expense_plot.png'
-                #os.remove('expense_plot.png')
-                return response
-        except Exception as e:
-            print(e)
-            return HttpResponse("Failed to download")
+            try:
+                with open('mapserverapp/static/media/mapserverapp/expense_plot.png', 'rb') as fh:
+                    response = HttpResponse(fh.read(), content_type="image/png")
+                    response['Content-Disposition'] = 'inline; filename=' + 'expense_plot.png'
+                    #os.remove('expense_plot.png')
+                    return response
+            except Exception as e:
+                print(e)
+                return HttpResponse("Failed to download")
+        else:
+            print("request body is None")
+    else:
+        return HttpResponse("Request not supported");

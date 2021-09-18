@@ -223,9 +223,8 @@ public class QueryExpense extends AppCompatActivity {
      * @param startCostF starting cost range
      * @param endCostF ending cost range
      * @param dateF transaction date
-     * @param beforeF delete all transaction before date
-     * @param afterF delete all transaction after date
-     * @param afterF
+     * @param beforeF query all transaction before date
+     * @param afterF query all transaction after date
      */
     private void searchData(double startCostF, double endCostF, String dateF, boolean beforeF, boolean afterF) {
 

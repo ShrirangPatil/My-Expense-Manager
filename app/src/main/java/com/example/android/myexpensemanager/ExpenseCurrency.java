@@ -27,7 +27,7 @@ import java.util.Map;
 public class ExpenseCurrency {
     static private String TAG = ExpenseCurrency.class.getName();
     public static SharedPreferences mCurrencyChoicePref = null;
-    static private String mRequestURL = "https://api.exchangeratesapi.io/latest?base=INR";
+    static private String mRequestURL = "https://api.exchangerate.host/latest?base=INR";
     public static void setBaseCurrency(String base) {
         base = "="+base;
         Log.i(TAG, mRequestURL);
@@ -80,7 +80,7 @@ public class ExpenseCurrency {
      * @param stringUrl Url string
      * @return Url object
      */
-    private static URL createUrl(String stringUrl) {
+    public static URL createUrl(String stringUrl) {
         URL url = null;
         try {
             url = new URL(stringUrl);
@@ -130,7 +130,7 @@ public class ExpenseCurrency {
             urlConnection.setReadTimeout(5000 /* milliseconds */);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
-            if (urlConnection.getResponseCode() == 200) {
+            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
