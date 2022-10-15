@@ -23,6 +23,7 @@ android {
             }
         }
     }
+    namespace 'com.example.android.myexpensemanager'
 }
 
 dependencies {

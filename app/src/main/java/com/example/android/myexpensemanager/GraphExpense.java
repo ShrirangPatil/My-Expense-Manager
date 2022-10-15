@@ -23,7 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class GraphExpense extends AppCompatActivity {
     private static String TAG = GraphExpense.class.getName();
-    private static String mRequestUrl = "http://192.168.43.199:8000/";
+    private static String mRequestUrl = "https://mxmmapserver.herokuapp.com/";
     private ImageView mImageView = null;
     private Bitmap mImageData = null;
     private ArrayList<Integer> mCostArrayList = new ArrayList<>();
@@ -48,6 +48,8 @@ public class GraphExpense extends AppCompatActivity {
     private void makeHttpRequest(URL url) throws IOException {
         Log.i(TAG, "makeHttpRequest called");
         HttpURLConnection urlConnection = null;
+        OutputStream outputStream = null;
+        InputStream inputStream = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
@@ -69,13 +71,13 @@ public class GraphExpense extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            OutputStream outputStream = urlConnection.getOutputStream();
+            outputStream = urlConnection.getOutputStream();
             byte[] sendData = jsonObject.toString().getBytes("utf-8");
             outputStream.write(sendData);
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 Log.i(TAG, "makeHttpRequest success");
                 try {
-                    InputStream inputStream = urlConnection.getInputStream();
+                    inputStream = urlConnection.getInputStream();
                     mImageData = BitmapFactory.decodeStream(inputStream);
                     Log.i(TAG, "image data "+mImageData.toString());
                     runOnUiThread(setImageViewWithBitMap);
@@ -92,6 +94,12 @@ public class GraphExpense extends AppCompatActivity {
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
+            }
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            if (inputStream != null) {
+                inputStream.close();
             }
         }
     }
